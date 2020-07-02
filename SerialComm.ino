@@ -1,6 +1,40 @@
 // send data to serial output
 
 #ifdef SERIALCOMM_ON
+
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character is a newline, set a flag
+    // so the main loop can do something about it:
+    if (inChar == '\n') {
+      stringComplete = true;
+    }
+  }
+}
+
+void sendData(){
+  Serial.print(temperatureAmbient);
+  Serial.print("|");
+  Serial.print(humidityAmbient);
+  Serial.print("|");
+  Serial.print(dewPointAmbient);
+  Serial.print("|");
+  Serial.print(heaterMode[0]);
+  Serial.print("|");
+  Serial.print(tempSensor[0]);
+  Serial.print("|");
+  Serial.print(100 * heaterDutyCycle[0] / 255);
+  Serial.print("|");
+  Serial.print(heaterMode[1]);
+  Serial.print("|");
+  Serial.print(tempSensor[1]);
+  Serial.print("|");
+  Serial.println(100 * heaterDutyCycle[1] / 255);
+}
 void printAmbientData() {
   Serial.println("");
   Serial.print("Ambient: ");
@@ -43,36 +77,47 @@ void printHeaterDS18B20data(int theChannel) {
 }
 
 void getCommand() {
-  // routine to allow serial control of mode and power
-  // enter the single character command <enter> in the serial monitor
-  // o/m/a = change to off/manual/automatic mode
-  // r = reset the device and go back to automatic mode (with 0 manual power)
-  // +/- = increase/decrease the manual power level
-  while (Serial.available() > 0) {
-    char incomingCharacter = Serial.read();
-    switch (incomingCharacter) {
-    // mode: 0=Off 1=Manual 2=Auto 3=Reset
-      case 'o':
-        heaterMode = 0;       // off mode
-        break;
-      case 'm':
-        heaterMode = 1;       // manual mode
-        break;
-      case 'a':
-        heaterMode = 2;       // automatic mode
-        break;
-      case 'r':       // reset - goes to auto and 0 manual power (defaults)
-        resetAmbientSensor();
-        resetDS18B20();
-        heaterMode = defaultHeaterMode;
-        heaterManualPower = defaultHeaterManualPower;
-        break;
-      case '+':
-        if (heaterManualPower < 10) heaterManualPower += 1;
-        break;
-      case '-':
-        if (heaterManualPower > 0) heaterManualPower -= 1;
-        break;
+  if(stringComplete){
+    if(inputString.length()>0){
+      //Serial.println(inputString);
+      stringComplete = false;
+      commandString = inputString.substring(1,5);
+      //Serial.println(commandString);
+      if(commandString.equals("POW1")){
+        int mode = inputString.substring(5,6).toInt();
+        if (mode == 1){
+          heaterMode[0] = mode;
+          String plusmin = inputString.substring(6,7);
+          
+          if (plusmin.equals("+")){
+            if (heaterManualPower[0] < 10) heaterManualPower[0] += 1;
+          }
+          else if (plusmin.equals("-")){
+            if (heaterManualPower[0] > 0) heaterManualPower[0] -= 1;
+          }
+        }
+        else{
+          heaterMode[0] = mode;
+        }
+      }
+      else if(commandString.equals("POW2")){
+        int mode = inputString.substring(5,6).toInt();
+        if (mode == 1){
+          heaterMode[1] = mode;
+          String plusmin = inputString.substring(6,7);
+          
+          if (plusmin.equals("+")){
+            if (heaterManualPower[1] < 10) heaterManualPower[1] += 1;
+          }
+          else if (plusmin.equals("-")){
+            if (heaterManualPower[1] > 0) heaterManualPower[1] -= 1;
+          }
+        }
+        else{
+          heaterMode[1] = mode;
+        }
+      }
+      inputString = "";
     }
   }
 }

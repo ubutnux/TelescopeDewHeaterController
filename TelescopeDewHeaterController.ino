@@ -1,13 +1,3 @@
-/*
- * Dew Heater Controller
- * Displays
- * - 16x2 LCD display on I2C. OLED on I2C
- * Ambient temp/humidity sensor
- * - AM2320 (Adafruit) on I2C. Other options - DHT22 on one-wire, soon a BME280 on I2C
- * Heater temp sensor
- * - DS18B20 sensor on 1-wire & dallatemperature
-*/
-
 #include "Globals.h"   // include the global variables, constants etc
 
 void setup(){
@@ -30,7 +20,8 @@ void setup(){
     heaterDutyCycle[i] = 0;                           // initially 0%
     analogWrite(heaterPin[i] , heaterDutyCycle[i]);   // write 0% power to outputs
   }
-  heaterManualPower = defaultHeaterManualPower;                              // initialise manual power to 0%
+  heaterManualPower[0] = defaultHeaterManualPower;                              // initialise manual power to 0%
+  heaterManualPower[1] = defaultHeaterManualPower;                              // initialise manual power to 0%
 }
 
 void loop() { 
@@ -39,11 +30,9 @@ void loop() {
   getAmbientData();
   //displayAmbientData();
   #ifdef SERIALCOMM_ON 
-  printAmbientData();
+  //printAmbientData();
   getCommand();
   #endif
-  //delay(theDelay*5);
-
   // check for mode change, if modebutton pressed, change mode
   //if (checkForModeChange()) changeTheMode();
 
@@ -60,11 +49,15 @@ void loop() {
       //displayDS18B20data(currentChannel);
       //displayHeaterOutput(currentChannel);
       #ifdef SERIALCOMM_ON 
-      printHeaterDS18B20data(currentChannel);
+      //printHeaterDS18B20data(currentChannel);
       #endif
-      delay(theDelay*5);
     }
     // check for mode change, if modebutton pressed, change mode
     //if (checkForModeChange()) changeTheMode();
   }
+  #ifdef SERIALCOMM_ON
+  sendData();
+  #endif
+  delay(theDelay);
+
 }

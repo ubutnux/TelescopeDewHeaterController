@@ -73,7 +73,7 @@ boolean   errorDS18B20[numChannels];        // error if tempSensor == -127C (DEV
 const int resDS18B20 = 9;                   // resolution of DS18B20 read. I think 9-12 = 0.5 - 0.125 degC
 
 // Heater output definitions
-int       heaterManualPower;                // power level if in Manual mode OR Auto & no sensor connected: 0-10 = 0-100%
+int       heaterManualPower[numChannels];                // power level if in Manual mode OR Auto & no sensor connected: 0-10 = 0-100%
 const int defaultHeaterManualPower = 0;     // and its default 
 int       heaterDutyCycle[numChannels];     // drive to heater
 
@@ -82,5 +82,9 @@ const float tempCutOff = 32;                // heater cut-off if too hot
 const float dewPointThreshold = 6;          // temp threshold above dew point to start heater
 const int   theDelay = 1000;                // delay for DS18B20 read in parasitic mode, displays, switches etc
 boolean     changeMode = false;             // change to MODE
-int         heaterMode = 2;                 // mode: 0=Off 1=Manual 2=Auto 3=Reset
+int         heaterMode[] = {2, 2};                 // mode: 0=Off 1=Manual 2=Auto 3=Reset
 const int   defaultHeaterMode = 2;          // and its deault
+
+String inputString = "";         // a string to hold incoming data
+boolean stringComplete = false;  // whether the string is complete
+String commandString = "";

@@ -11,19 +11,19 @@ void setHeaterData(int theChannel) {
   int theDutyCycle;
 
   // OFF mode: set heater duty cycle to 0
-  if (heaterMode == 0)
+  if (heaterMode[theChannel] == 0)
     theDutyCycle = 0;
 
   // MANUAL mode: set heater duty cycle to manual level
-  if (heaterMode == 1) {
-    theDutyCycle = 25.5 * heaterManualPower; // output range 0 - 255
+  if (heaterMode[theChannel] == 1) {
+    theDutyCycle = 25.5 * heaterManualPower[theChannel]; // output range 0 - 255
   }
   
   // AUTO mode: set heater duty cycle to auto set level if no read errors
-  if (heaterMode == 2) {
+  if (heaterMode[theChannel] == 2) {
     if (errorDS18B20[theChannel] || errorAmbientSensor) { 
       // if error reading either AM2320 or DS18B20, set heater duty cycle to manual level
-      theDutyCycle = 25.5 * heaterManualPower; // as above for manual
+      theDutyCycle = 25.5 * heaterManualPower[theChannel]; // as above for manual
     }
     else { 
       // if no read errors for AM2320 or DS18B20
