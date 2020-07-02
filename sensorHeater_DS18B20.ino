@@ -9,14 +9,6 @@ void resetDS18B20() {
     sensor1.begin();
     sensor1.setResolution(resDS18B20);
   }
-  if (numChannels >= 3) {
-    sensor1.begin();
-    sensor1.setResolution(resDS18B20);
-  }
-  if (numChannels == 4) {
-    sensor1.begin();
-    sensor1.setResolution(resDS18B20);
-  }
 }
 
 void getDS18B20data(int theChannel) {
@@ -28,23 +20,17 @@ void getDS18B20data(int theChannel) {
   if (errorDS18B20[theChannel]) {
     if (theChannel == 0) sensor0.begin();
     if (theChannel == 1) sensor1.begin();
-    if (theChannel == 2) sensor2.begin();
-    if (theChannel == 3) sensor3.begin();
     delay(750/ (1 << (12-resDS18B20)));
   }
 
   // request temperature, calc delay needed for read/conversion
   if (theChannel == 0) sensor0.requestTemperatures();
   if (theChannel == 1) sensor1.requestTemperatures();
-  if (theChannel == 2) sensor2.requestTemperatures();
-  if (theChannel == 3) sensor3.requestTemperatures();
   delay(750/ (1 << (12-resDS18B20)));
 
   // get temperature in celsius
   if (theChannel == 0) tempSensor[0] = sensor0.getTempCByIndex(0);
   if (theChannel == 1) tempSensor[1] = sensor1.getTempCByIndex(0);
-  if (theChannel == 2) tempSensor[2] = sensor2.getTempCByIndex(0);
-  if (theChannel == 3) tempSensor[3] = sensor3.getTempCByIndex(0);
   delay(750/ (1 << (12-resDS18B20)));
   outputHeaterData(theChannel);                   // turn the PWMs back on now as turned off before reading DS18B20
 

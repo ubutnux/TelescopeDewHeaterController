@@ -19,7 +19,7 @@ void setup(){
   resetDS18B20();
   
   // set up the LCD/OLED display
-  displaySetUp();
+  //displaySetUp();
 
   // setup mode pin
   pinMode(controlSwitchPin, INPUT_PULLUP);            // internal pullup resistor, so LOW = active
@@ -37,15 +37,15 @@ void loop() {
   // Read ambient temperature & humidity from AM2320 sensor. And display data
 
   getAmbientData();
-  displayAmbientData();
+  //displayAmbientData();
   #ifdef SERIALCOMM_ON 
   printAmbientData();
   getCommand();
   #endif
-  delay(theDelay*5);
+  //delay(theDelay*5);
 
   // check for mode change, if modebutton pressed, change mode
-  if (checkForModeChange()) changeTheMode();
+  //if (checkForModeChange()) changeTheMode();
 
   // go through the DS18B20/heater channels
   for (int currentChannel=0; currentChannel < numChannels; currentChannel++) {
@@ -57,14 +57,14 @@ void loop() {
     outputHeaterData(currentChannel);
     if (heaterMode != 0) {
       // if not OFF, display the DS18B20 and heater data
-      displayDS18B20data(currentChannel);
-      displayHeaterOutput(currentChannel);
+      //displayDS18B20data(currentChannel);
+      //displayHeaterOutput(currentChannel);
       #ifdef SERIALCOMM_ON 
       printHeaterDS18B20data(currentChannel);
       #endif
       delay(theDelay*5);
     }
     // check for mode change, if modebutton pressed, change mode
-    if (checkForModeChange()) changeTheMode();
+    //if (checkForModeChange()) changeTheMode();
   }
 }

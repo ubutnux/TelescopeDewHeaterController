@@ -2,6 +2,7 @@
 
 #ifdef DHT22_ON
 void resetAmbientSensor() {
+  dht.begin();
   // not needed for DHT22
 }
 

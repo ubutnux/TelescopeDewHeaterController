@@ -7,48 +7,26 @@
  * DEFINE WHICH DEVICES ARE USED WITH _ON & _OFF
 */
 
-// display = LCD 16*2 display AND OLED 128*64
-#define LCD_ON
-#define OLED_OFF
 // ambient temp/humidity sensor = AM2320 AND DHT22
-#define AM2320_ON
-#define DHT22_OFF           
+#define AM2320_OFF
+#define DHT22_ON          
 // serial output data to PC
-#define SERIALCOMM_OFF                     // send sensor & heater data to PC
+#define SERIALCOMM_ON                     // send sensor & heater data to PC
 
 // Max of 4x possible channels for heater output/sensor with DS18B20
 // Currently set for 2x channels
-const int maxChannels = 4;                  // max number of channels = 4
+const int maxChannels = 2;                  // max number of channels = 4
 const int numChannels = 2;                  // number of used channels = 2
 
 // these are all the DIGITAL PINS for sensor input, heater output & control. Doesn't include sensors on I2C
 const int controlSwitchPin = 3;             // Mode control switch PIN, uses internal pull-up resistor  
-const int heaterPin[]  = {9, 10, 5, 6};     // MOSFET heater output channels on PWM pins. 2 channels = pins 9, 10
-const int DS18B20pin[] = {7, 8, 5, 11};     // heater temp sensor pins. 2 channels = 7, 8
+const int heaterPin[]  = {9, 10};     // MOSFET heater output channels on PWM pins. 2 channels = pins 9, 10
+const int DS18B20pin[] = {7, 8};     // heater temp sensor pins. 2 channels = 7, 8
 
 /* 
  *  Define libraries & parameters for the devices
 */
 
-/*
- * THE DISPLAYS  
-*/
-
-// LCD display 16x2
-#ifdef LCD_ON
-#include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x27,16,2); // 0x3F is the I2C bus address for my 16x2 LCD displays. Others = 0x27, 0x3F
-#endif
-
-// OLED 128x64 display
-#ifdef OLED_ON
-// note the 128*64 SSD1306 display: address on I2C = 0x3C (or 0x3D). Its set in display_OLED_128x64
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#define OLED_RESET 4
-Adafruit_SSD1306 display(OLED_RESET);
-#endif
 
 /* 
  *  THE AMBIENT TEMP/HUMIDITY SENSORS
@@ -86,12 +64,8 @@ boolean     errorAmbientSensor;
 // include definitions for all 4 channels, even if using fewer. Can't figure out how to make this to suit numChannels
 OneWire oneWire0(DS18B20pin[0]);
 OneWire oneWire1(DS18B20pin[1]);
-OneWire oneWire2(DS18B20pin[2]);       
-OneWire oneWire3(DS18B20pin[3]);        
 DallasTemperature sensor0(&oneWire0);
 DallasTemperature sensor1(&oneWire1);
-DallasTemperature sensor2(&oneWire2); 
-DallasTemperature sensor3(&oneWire3);
 
 // and the DS18B20 variables
 float     tempSensor[numChannels];          // DS18B20 sensor temperatures from sensors1/2.
