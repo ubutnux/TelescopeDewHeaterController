@@ -88,3 +88,12 @@ const int   defaultHeaterMode = 2;          // and its deault
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
 String commandString = "";
+
+float set_temperature = 20;
+float PID_error = 0;
+float previous_error = 0;
+float elapsedTime, Time, timePrev;
+int PID_value = 0;
+//PID constants
+int kp = 10;   int ki = 0.5;   int kd = 1;
+int PID_p = 0;    int PID_i = 0;    int PID_d = 0;

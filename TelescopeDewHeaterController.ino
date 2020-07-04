@@ -22,6 +22,7 @@ void setup(){
   }
   heaterManualPower[0] = defaultHeaterManualPower;                              // initialise manual power to 0%
   heaterManualPower[1] = defaultHeaterManualPower;                              // initialise manual power to 0%
+  Time = millis();
 }
 
 void loop() { 
@@ -42,12 +43,13 @@ void loop() {
     getDS18B20data(currentChannel);
 
     // set the heater output & display power
-    setHeaterData(currentChannel);
-    outputHeaterData(currentChannel);
+    
     if (heaterMode != 0) {
       // if not OFF, display the DS18B20 and heater data
       //displayDS18B20data(currentChannel);
       //displayHeaterOutput(currentChannel);
+      setHeaterData(currentChannel);
+      outputHeaterData(currentChannel);
       #ifdef SERIALCOMM_ON 
       //printHeaterDS18B20data(currentChannel);
       #endif

@@ -14,7 +14,7 @@ void resetDS18B20() {
 void getDS18B20data(int theChannel) {
   // zero the PWM output to heaters while talking to DS18B20s
   // as causing interefrences if DS18B20 & heater lines close
-  analogWrite(heaterPin[theChannel] , 0);                 
+  //analogWrite(heaterPin[theChannel] , 0);                 
   
   // restart the library if last pass of DS18B20 had a read error
   if (errorDS18B20[theChannel]) {
